@@ -90,8 +90,7 @@ const resetPassLink = async(req, res) => {
         token: crypto.randomBytes(32).toString("hex"),
         }).save();
 
-        // const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
-        const message = `<p> Click<a href='http://localhost:3000/reset-password?id=${user._id}&token=${resetToken.token}'> here </a>to verify</p>`;
+        const message = `<p> Click<a href='http://localhost:3000/reset-password?id=${user._id}&token=${resetToken.token}'> here </a>to reset password</p>`;
         await sendEmail(user.email, "Password Reset", 'Please reset your password', message);
 
         res.status(200).json({message: "An Email sent to your account please verify"})
@@ -117,7 +116,7 @@ const resetPassword = async(req, res) =>{
         await User.updateOne({ _id: user._id}, {password: encryptPass });
         await Token.findByIdAndRemove(token._id);
 
-        res.send("Thank you, your email verified sucessfully, you can close this window");
+        res.send("Your password has been reset successfully");
     } catch (error) {
         res.status(400).send("An error occured")
     }
